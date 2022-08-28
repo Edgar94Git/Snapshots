@@ -10,11 +10,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.snapshots.databinding.FragmentAddBinding
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 
 class AddFragment : Fragment() {
     private val RC_GALLERY = 18
-    private lateinit var mBinding: FragmentAddBinding
     private var mPhotoSelectedUri: Uri? = null
+    private val PATH_SNAPSHOT = "snapshots"
+
+    private lateinit var mBinding: FragmentAddBinding
+    private lateinit var mStoregeReference: StorageReference
+    private lateinit var mDatabaseReferencce: DatabaseReference
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +38,8 @@ class AddFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         mBinding.btnPost.setOnClickListener { postSnapshot() }
         mBinding.btnSelect.setOnClickListener { openGallery() }
+        mStoregeReference = FirebaseStorage.getInstance().reference
+        mDatabaseReferencce = FirebaseDatabase.getInstance().reference.child(PATH_SNAPSHOT)
     }
 
     private fun openGallery() {
@@ -38,6 +48,10 @@ class AddFragment : Fragment() {
     }
 
     private fun postSnapshot() {
+    }
+
+    private fun saveSnapShot(){
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
