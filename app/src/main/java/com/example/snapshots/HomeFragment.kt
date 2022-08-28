@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -22,6 +23,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var mBinding: FragmentHomeBinding
     private lateinit var mFirebaseAdapter: FirebaseRecyclerAdapter<Snapshot, SnapshotHolderView>
+    private lateinit var mLayoutManager: RecyclerView.LayoutManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +34,8 @@ class HomeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         val query = FirebaseDatabase.getInstance().reference.child("snapshots")
 
         val options = FirebaseRecyclerOptions.Builder<Snapshot>()
@@ -74,8 +78,23 @@ class HomeFragment : Fragment() {
                 Toast.makeText(mContext, error.message, Toast.LENGTH_SHORT).show()
             }
         }
+        mLayoutManager = LinearLayoutManager(context)
 
-        super.onViewCreated(view, savedInstanceState)
+        mBinding.recyclerView.apply {
+            setHasFixedSize(true)
+            layoutManager = mLayoutManager
+            adapter = mFirebaseAdapter
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mFirebaseAdapter.startListening()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mFirebaseAdapter.stopListening()
     }
 
     inner class SnapshotHolderView(view: View) : RecyclerView.ViewHolder(view){
