@@ -51,6 +51,7 @@ class AddFragment : Fragment() {
 
     private fun postSnapshot() {
         mBinding.progressBar.visibility = View.VISIBLE
+        val key = mDatabaseReferencce.push().key!!
         val storegeReference = mStoregeReference.child(PATH_SNAPSHOT).child("my_photo")
         if(mPhotoSelectedUri != null){
             storegeReference.putFile(mPhotoSelectedUri!!)
@@ -63,6 +64,11 @@ class AddFragment : Fragment() {
                     mBinding.progressBar.visibility = View.INVISIBLE
                 }
                 .addOnSuccessListener{
+                    it.storage.downloadUrl.addOnSuccessListener {
+                        saveSnapShot(key, it.toString(), mBinding.etTitle.text.toString().trim())
+                        mBinding.tilTitle.visibility = View.INVISIBLE
+                        mBinding.tvMessage.text = getString(R.string.post_message_title)
+                    }
                     Snackbar.make(mBinding.root, "Imgane cargada", Toast.LENGTH_SHORT).show()
                 }
                 .addOnFailureListener{
@@ -71,8 +77,9 @@ class AddFragment : Fragment() {
         }
     }
 
-    private fun saveSnapShot(){
-
+    private fun saveSnapShot(key: String, url: String, title: String){
+        val snapshot = Snapshot(title = title, photoUrl =  url)
+        mDatabaseReferencce.child(key).setValue(snapshot)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
