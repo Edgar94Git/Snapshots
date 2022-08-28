@@ -2,4 +2,5 @@
 <resources>
     <dimen name="bottom_margin_min">8dp</dimen>
     <dimen name="bottom_margin_default">16dp</dimen>
+    <dimen name="bottom_padding_default">16dp</dimen>
 </resources>
