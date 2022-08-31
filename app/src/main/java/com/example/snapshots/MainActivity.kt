@@ -1,16 +1,15 @@
 package com.example.snapshots
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.snapshots.databinding.ActivityMainBinding
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,7 +18,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mFragmentManager: FragmentManager
     private lateinit var mAuthListener: FirebaseAuth.AuthStateListener
     private var mFirebaseAuth: FirebaseAuth? = null
-    private val RC_SING_IN = 21
+
+    private val authResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+        if(it.resultCode == RESULT_OK){
+            Toast.makeText(this, "Bienvenido", Toast.LENGTH_SHORT).show()
+        }
+        else{
+            if(IdpResponse.fromResultIntent(it.data) == null){
+                finish()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,13 +43,13 @@ class MainActivity : AppCompatActivity() {
         mAuthListener = FirebaseAuth.AuthStateListener {
             val user = it.currentUser
             if(user == null){
-                startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
+                authResult.launch(AuthUI.getInstance().createSignInIntentBuilder()
                     .setAvailableProviders(
-                        Arrays.asList(
+                        listOf(
                             AuthUI.IdpConfig.EmailBuilder().build(),
                             AuthUI.IdpConfig.GoogleBuilder().build()
                         )
-                    ).build(), RC_SING_IN)
+                    ).build())
             }
         }
     }
@@ -68,7 +77,7 @@ class MainActivity : AppCompatActivity() {
             .add(R.id.hostFragment, homeFragment, HomeFragment::class.java.name)
             .commit()
 
-        mBinding.bottomNav.setOnNavigationItemSelectedListener {
+        mBinding.bottomNav.setOnItemSelectedListener {
             when(it.itemId)
             {
                 R.id.action_home -> {
@@ -104,19 +113,5 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         mFirebaseAuth?.removeAuthStateListener(mAuthListener)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == RC_SING_IN){
-            if(resultCode == RESULT_OK){
-                Toast.makeText(this, "Bienvenido", Toast.LENGTH_SHORT).show()
-            }
-            else{
-                if(IdpResponse.fromResultIntent(data) == null){
-                    finish()
-                }
-            }
-        }
     }
 }
