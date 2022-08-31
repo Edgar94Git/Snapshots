@@ -8,4 +8,6 @@
     <string name="post_message_title">Seleccione una imagen</string>
     <string name="post_message_valid_title">Por favor, añada un titulo</string>
     <string name="btnLogout">Cerrar Sesion</string>
+    <string name="image_add_message">Imgane cargada</string>
+    <string name="image_error_message">Error</string>
 </resources>

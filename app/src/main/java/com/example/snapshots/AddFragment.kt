@@ -30,7 +30,7 @@ class AddFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         mBinding = FragmentAddBinding.inflate(inflater, container, false)
 
@@ -72,10 +72,10 @@ class AddFragment : Fragment() {
                         mBinding.tilTitle.visibility = View.INVISIBLE
                         mBinding.tvMessage.text = getString(R.string.post_message_title)
                     }
-                    Snackbar.make(mBinding.root, "Imgane cargada", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(mBinding.root, getString(R.string.image_add_message), Toast.LENGTH_SHORT).show()
                 }
                 .addOnFailureListener{
-                    Snackbar.make(mBinding.root, "Error", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(mBinding.root, getString(R.string.image_error_message), Toast.LENGTH_SHORT).show()
                 }
         }
     }
