@@ -20,10 +20,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 
 class AddFragment : Fragment() {
-    private val RC_GALLERY = 18
     private var mPhotoSelectedUri: Uri? = null
-    private val PATH_SNAPSHOT = "snapshots"
-
     private lateinit var mBinding: FragmentAddBinding
     private lateinit var mStoregeReference: StorageReference
     private lateinit var mDatabaseReferencce: DatabaseReference
@@ -52,7 +49,7 @@ class AddFragment : Fragment() {
         mBinding.btnPost.setOnClickListener { postSnapshot() }
         mBinding.btnSelect.setOnClickListener { openGallery() }
         mStoregeReference = FirebaseStorage.getInstance().reference
-        mDatabaseReferencce = FirebaseDatabase.getInstance().reference.child(PATH_SNAPSHOT)
+        mDatabaseReferencce = FirebaseDatabase.getInstance().reference.child(SnapshotsApplication.PATH_SNAPSHOTS)
     }
 
     private fun openGallery() {
@@ -63,20 +60,20 @@ class AddFragment : Fragment() {
     private fun postSnapshot() {
         mBinding.progressBar.visibility = View.VISIBLE
         val key = mDatabaseReferencce.push().key!!
-        val storegeReference = mStoregeReference.child(PATH_SNAPSHOT)
+        val storegeReference = mStoregeReference.child(SnapshotsApplication.PATH_SNAPSHOTS)
             .child(FirebaseAuth.getInstance().currentUser!!.uid)
             .child(key)
         if(mPhotoSelectedUri != null){
             storegeReference.putFile(mPhotoSelectedUri!!)
                 .addOnProgressListener {
-                    val process = (100 * it.bytesTransferred/it.totalByteCount).toDouble()
-                    mBinding.progressBar.progress = process.toInt()
-                    mBinding.tvMessage.text = "$process%"
+                    val progress = (100 * it.bytesTransferred/it.totalByteCount).toDouble()
+                    mBinding.progressBar.progress = progress.toInt()
+                    mBinding.tvMessage.text = String.format("%s%%", progress)
                 }
                 .addOnCompleteListener{
                     mBinding.progressBar.visibility = View.INVISIBLE
                 }
-                .addOnSuccessListener{
+                .addOnSuccessListener{ it ->
                     it.storage.downloadUrl.addOnSuccessListener {
                         saveSnapShot(key, it.toString(), mBinding.etTitle.text.toString().trim())
                         mBinding.tilTitle.visibility = View.INVISIBLE
