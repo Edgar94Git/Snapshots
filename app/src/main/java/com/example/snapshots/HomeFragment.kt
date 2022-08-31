@@ -16,7 +16,6 @@ import com.example.snapshots.databinding.FragmentHomeBinding
 import com.example.snapshots.databinding.ItemSnapshotBinding
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
-import com.firebase.ui.database.SnapshotParser
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -26,8 +25,6 @@ class HomeFragment : Fragment(), HomeAux {
     private lateinit var mBinding: FragmentHomeBinding
     private lateinit var mFirebaseAdapter: FirebaseRecyclerAdapter<Snapshot, SnapshotHolderView>
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
-    private val PATH_SNAPSHOT = "snapshots"
-    private val PATH_LIKELIST = "likeList"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,14 +37,13 @@ class HomeFragment : Fragment(), HomeAux {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val query = FirebaseDatabase.getInstance().reference.child(PATH_SNAPSHOT)
+        val query = FirebaseDatabase.getInstance().reference.child(SnapshotsApplication.PATH_SNAPSHOTS)
 
-        val options = FirebaseRecyclerOptions.Builder<Snapshot>().setQuery(query, SnapshotParser {
-                val snapshot = it.getValue(Snapshot::class.java)
-                snapshot!!.id = it.key!!
-                snapshot
-            }).build()
-            //.setQuery(query, Snapshot::class.java).build()
+        val options = FirebaseRecyclerOptions.Builder<Snapshot>().setQuery(query) {
+            val snapshot = it.getValue(Snapshot::class.java)
+            snapshot!!.id = it.key!!
+            snapshot
+        }.build()
 
         mFirebaseAdapter = object : FirebaseRecyclerAdapter<Snapshot, SnapshotHolderView>(options){
             private lateinit var mContext: Context
@@ -112,18 +108,18 @@ class HomeFragment : Fragment(), HomeAux {
     }
 
     private fun deleteSnapshot(snapshot: Snapshot){
-        val databaseReference = FirebaseDatabase.getInstance().reference.child(PATH_SNAPSHOT)
+        val databaseReference = FirebaseDatabase.getInstance().reference.child(SnapshotsApplication.PATH_SNAPSHOTS)
         databaseReference.child(snapshot.id).removeValue()
     }
 
     private fun setLike(snapshot: Snapshot, checked: Boolean){
-        val databaseReference = FirebaseDatabase.getInstance().reference.child(PATH_SNAPSHOT)
+        val databaseReference = FirebaseDatabase.getInstance().reference.child(SnapshotsApplication.PATH_SNAPSHOTS)
         if(checked){
-            databaseReference.child(snapshot.id).child(PATH_LIKELIST)
+            databaseReference.child(snapshot.id).child(SnapshotsApplication.PROPERTY_LIKE_LIST)
                 .child(FirebaseAuth.getInstance().currentUser!!.uid).setValue(checked)
         }
         else{
-            databaseReference.child(snapshot.id).child(PATH_LIKELIST)
+            databaseReference.child(snapshot.id).child(SnapshotsApplication.PROPERTY_LIKE_LIST)
                 .child(FirebaseAuth.getInstance().currentUser!!.uid).setValue(null)
         }
     }
