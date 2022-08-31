@@ -17,6 +17,7 @@ import com.example.snapshots.databinding.ItemSnapshotBinding
 import com.firebase.ui.database.FirebaseListOptions
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.firebase.ui.database.SnapshotParser
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 
@@ -39,8 +40,12 @@ class HomeFragment : Fragment() {
 
         val query = FirebaseDatabase.getInstance().reference.child("snapshots")
 
-        val options = FirebaseRecyclerOptions.Builder<Snapshot>()
-            .setQuery(query, Snapshot::class.java).build()
+        val options = FirebaseRecyclerOptions.Builder<Snapshot>().setQuery(query, SnapshotParser {
+                val snapshot = it.getValue(Snapshot::class.java)
+                snapshot!!.id = it.key!!
+                snapshot
+            }).build()
+            //.setQuery(query, Snapshot::class.java).build()
 
         mFirebaseAdapter = object : FirebaseRecyclerAdapter<Snapshot, SnapshotHolderView>(options){
             private lateinit var mContext: Context
@@ -113,7 +118,6 @@ class HomeFragment : Fragment() {
         val binding = ItemSnapshotBinding.bind(view)
 
         fun setListener(snapshot: Snapshot){
-            snapshot.id = (1).toString()
             binding.btnDelete.setOnClickListener { deleteSnapshot(snapshot) }
         }
     }
