@@ -98,12 +98,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        mFirebaseAuth?.addAuthStateListener { mAuthListener }
+        mFirebaseAuth?.addAuthStateListener(mAuthListener)
     }
 
     override fun onPause() {
         super.onPause()
-        mFirebaseAuth?.removeAuthStateListener { mAuthListener }
+        mFirebaseAuth?.removeAuthStateListener(mAuthListener)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
