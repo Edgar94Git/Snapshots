@@ -10,7 +10,7 @@
         android:id="@+id/btnLogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btnLogout"
+        android:text="@string/profile_button_logout"
         app:icon="@drawable/ic_logout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
