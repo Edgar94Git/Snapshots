@@ -1,4 +1,4 @@
-package com.example.snapshots
+package com.example.snapshots.ui.home
 
 interface HomeAux {
     fun goToTop()

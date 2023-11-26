@@ -1,4 +1,4 @@
-package com.example.snapshots
+package com.example.snapshots.ui.add
 
 import android.app.Activity
 import android.content.Context
@@ -12,6 +12,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.contract.ActivityResultContracts
+import com.example.snapshots.ui.mainactivity.MainAux
+import com.example.snapshots.R
+import com.example.snapshots.Snapshot
+import com.example.snapshots.SnapshotsApplication
 import com.example.snapshots.databinding.FragmentAddBinding
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.DatabaseReference

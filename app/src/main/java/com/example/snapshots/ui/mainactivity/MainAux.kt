@@ -1,4 +1,4 @@
-package com.example.snapshots
+package com.example.snapshots.ui.mainactivity
 
 import com.google.android.material.snackbar.Snackbar
 

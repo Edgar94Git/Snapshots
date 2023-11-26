@@ -1,4 +1,4 @@
-package com.example.snapshots
+package com.example.snapshots.ui.home
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -11,6 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.snapshots.ui.profile.FragmentAux
+import com.example.snapshots.R
+import com.example.snapshots.Snapshot
+import com.example.snapshots.SnapshotsApplication
 import com.example.snapshots.databinding.FragmentHomeBinding
 import com.example.snapshots.databinding.ItemSnapshotBinding
 import com.firebase.ui.database.FirebaseRecyclerAdapter

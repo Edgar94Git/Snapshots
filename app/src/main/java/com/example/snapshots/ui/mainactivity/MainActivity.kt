@@ -1,4 +1,4 @@
-package com.example.snapshots
+package com.example.snapshots.ui.mainactivity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,7 +6,13 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.example.snapshots.ui.profile.FragmentAux
+import com.example.snapshots.R
+import com.example.snapshots.SnapshotsApplication
 import com.example.snapshots.databinding.ActivityMainBinding
+import com.example.snapshots.ui.add.AddFragment
+import com.example.snapshots.ui.home.HomeFragment
+import com.example.snapshots.ui.profile.ProfileFragment
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.snackbar.Snackbar
